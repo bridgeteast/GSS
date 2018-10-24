@@ -1,6 +1,6 @@
 ---
 title: "Social Survey 2010"
-author: "Put your name here!"
+author: "Bridget East"
 date: "Fall 2018"
 output:
   html_document:
@@ -19,10 +19,14 @@ require(tigerstats)
 
 Use the data from the 2010 general social survey to explore whether belief in continental drift (condrift), views on capitol punishment (cappun), and race (race) are independent of each other.
 
+General social survey is a giant survey that happens every few years that involves a large number of participants. We are going to use this data to see if race is related to opinions on continental drift and capitol punishment. We will start by plotting and comparing the data, and then comparing numerical results.
+
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
-
+  
+We are graphing the data in seperate bar charts and organizing the data to compare race and cappun and condrift and observe the graphical results. Then we will use chisquared tests to compare the data and observe the numerical results.
+  
 #Results
 
 <!--Divide this section into two sub-sections:  One for your descriptive  results and one for your inferential results.!-->
@@ -42,17 +46,77 @@ alldata <- read.csv(file="gss2010.csv", header=TRUE)
 ```{r}
 barchartGC(~race+condrift, data=alldata, type = "percent") 
 ```
-
-
+  
+If some one does not believe in continental drift, they are more likely to be black. If they beleive it is true they are more than likely other or white.
+  
+  
+```{r}
+barchartGC(~race+cappun, data=alldata, type = "percent")
+```
+  
+It looks like blacks disagree with capitol punishment most of the time, and other races favor it most of the time and whites favor it almost all of the time. So if some one supports capitol punishment they are more likely to be white and if they dont they are more likely to be black.
+  
+  
+```{r}
+barchartGC(~condrift+cappun, data=alldata, type = "percent")
+```
+  
+The results look identical, it seems like they may not be related.
+  
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+  
+```{r}
+rcondrift = xtabs(~race+condrift,data=alldata)
+rowPerc(rcondrift)
+```
 
+There is a sizeable amount of blacks that do not beleive in condrift, and other and whites are almost the same.
+  
+```{r}
+rcappun = xtabs(~race+cappun,data=alldata)
+rowPerc(rcappun)
+```
+ 
+The opinions of black is almost opposite of other, 53 percent of blacks oppose cappun while 56 percent of other favor it. The majority of whites favor cappun and few oppose it.
+  
+```{r}
+cappuncondrift = xtabs(~cappun+condrift,data=alldata)
+rowPerc(cappuncondrift)
+```
+  
+The results are almost exactly the same they are less than one percent different. It looks like the two are not related.
+    
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
+  
+  
+  
+```{r}
+chisqtestGC(~race+condrift, data=alldata,graph = TRUE)
+```
 
+We reject the null hypothesis, there is something going on between race and opinions of continental drift.
+  
+```{r}
+chisqtestGC(~race+cappun, data=alldata, graph = TRUE)
+```
+  
 
+We reject the null hypothesis, there is something going on between race and opinions of capitol punishment.
+    
+```{r}
+chisqtestGC(~condrift+cappun, data=alldata, graph = TRUE)
+```
+  
+We accept the null hypothesis, that means this result would happen most of the time and these two variables do not seem to be related.
+  
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+  
+  There seems to be a relationship between race and opinions of capitol punshment and continental drift, however Continental drift and Capitol punishment opinions are not related to each other.
+
+
